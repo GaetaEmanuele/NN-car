@@ -1,0 +1,18 @@
+# Esclude i file di cache di Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Esclude file di log e temporanei
+*.log
+*.tmp
+*.swp
+*.bak
+
+# Esclude ambienti virtuali di Python (se usi venv)
+venv/
+env/
+
+# Esclude file specifici del sistema operativo
+.DS_Store  # macOS
+
