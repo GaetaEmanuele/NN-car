@@ -107,3 +107,45 @@ class Matrix:
             " ".join(f"{self.data[i * self.cols + j]:.2f}" for j in range(self.cols))
             for i in range(self.rows)
          )
+
+class Vector(Matrix):
+    def __init__(self, data, row_vector=False):
+        """This is a specif case of the previus class, column vector default, row vector if flag = True"""
+        if row_vector:
+            super().__init__(1, len(data), data)  # row vector 1xn
+        else:
+            super().__init__(len(data), 1, data)  # column vector nx1
+
+    def __repr__(self):
+        """The vector will be stored as a string (just for plotted)"""
+        if self.rows == 1:
+            return "RowVector: " + " ".join(f"{self.data[i]:.2f}" for i in range(self.cols))
+        else:
+            return "ColumnVector:\n" + "\n".join(f"{self.data[i]:.2f}" for i in range(self.rows))
+    def length(self):
+        if self.rows > 1:
+            return self.rows
+        else:
+            return self.cols
+    def __eq__(self, other):
+        """ Overload the = operator to allow for assignment from a matrix
+            that has one dimension equal to 1 (e.g., a row or a column)
+        """
+        if isinstance(other, Matrix):
+            if other.rows == 1:
+                # If the matrix has 1 row, convert it to a row vector
+                self.data = other.data  # Or extract the row data
+                self.rows = 1
+                self.cols = other.cols
+            elif other.cols == 1:
+                # If the matrix has 1 column, convert it to a column vector
+                self.data = other.data  # Or extract the column data
+                self.rows = other.rows
+                self.cols = 1
+            else:
+                # If it's not a row or column, leave the matrix as is
+                self.data = other.data
+                self.rows = other.rows
+                self.cols = other.cols
+        else:
+            raise ValueError("Cannot assign a non-matrix to a Vector.")

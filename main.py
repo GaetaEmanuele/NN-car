@@ -1,4 +1,4 @@
-from linear_algebra import Matrix 
+from linear_algebra import Matrix , Vector
 #Example1 Matrix
 
 A = Matrix(2, 3, [1.2345, 2.6789, 3.4567, 4.9999, 5.1234, 6.9876])
@@ -34,3 +34,14 @@ print()
 print('somma: ')
 print()
 print(A2)
+print()
+print('Example3')
+print()
+print(C)
+C = C.transpose()
+print()
+print(C)
+print()
+print('Example4')
+v = Vector([1,2,3,4])
+print(v)
