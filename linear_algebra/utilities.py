@@ -1,11 +1,9 @@
-from matrix import Matrix,Vector
 
-def dot(a: Vector,b: Vector):
-    dim1 = a.length()
-    dim2 = b.length()
-    sum = 0.0
-    if dim1 != dim2:
-        TypeError('The 2 vector have different dimension')
-    else:
-        sum += a[i]*b[i] for i in range(dim1)
-        return sum
+def dot(a, b):
+    if isinstance(a, (int, float)) and isinstance(b, (int, float)):  
+        return a * b  # scalar product between 2 real number (just their product)
+
+    if hasattr(a, "is_vector") and a.is_vector() and hasattr(b, "is_vector") and b.is_vector():
+        return sum(x * y for x, y in zip(a.data, b.data))  # scalar product between 2 number
+
+    raise TypeError("Type of input data not valid")

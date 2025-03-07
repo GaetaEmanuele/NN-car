@@ -1,5 +1,5 @@
 import array
-
+from utilities import dot
 class Matrix:
     def __init__(self, rows, cols, fill=None):
         self.rows = rows
@@ -107,6 +107,21 @@ class Matrix:
             " ".join(f"{self.data[i * self.cols + j]:.2f}" for j in range(self.cols))
             for i in range(self.rows)
          )
+    def __mul__(self,other):
+        if isinstance(self,Matrix) and isinstance(other,Matrix):
+            if self.cols != other.rows:
+                IndexError('Dimension not coincide')
+            else:
+                result = Matrix(self.rows,other.cols)
+                for i in range(self.rows):
+                    for j in range(other.cols):
+                        [data1 = self.data[i,:]]
+                        [data2 = other.data[:,j]]
+                        v1 = Vector(self.cols,data1,True)
+                        v2 = Vector(self.cols,data2)
+                        result[i,j] = dot(v1,v2)
+                return result
+        else: TypeError("Type not allowed")
 
 class Vector(Matrix):
     def __init__(self, data, row_vector=False):
@@ -115,6 +130,12 @@ class Vector(Matrix):
             super().__init__(1, len(data), data)  # row vector 1xn
         else:
             super().__init__(len(data), 1, data)  # column vector nx1
+    def __init__(self, row_vector=False):
+        """This is a specif case of the previus class, column vector default, row vector if flag = True"""
+        if row_vector:
+            super().__init__(1, len(data))  # row vector 1xn
+        else:
+            super().__init__(len(data), 1)  # column vector nx1
 
     def __repr__(self):
         """The vector will be stored as a string (just for plotted)"""
@@ -149,3 +170,53 @@ class Vector(Matrix):
                 self.cols = other.cols
         else:
             raise ValueError("Cannot assign a non-matrix to a Vector.")
+    def __setitem__(self, index, value):
+        """Overload of [] for save the data"""
+        if isinstance(index, int) and index < max(self.rows,self.cols):
+            self.data[index] = value
+        elif isinstance(index,slice):
+            if length(value) != length(self.data):
+                raise IndexError("The 2 vectors have different dimension")
+            else:
+                self.data = value
+        else:
+            raise IndexError("Index not valid")
+
+    def __getitem__(self, index):
+        """Overload of [] for access the data"""
+        if isinstance(index, int) and index < max(self.rows,self.cols):
+            return self.data[index]
+        elif isinstance(index,slice):
+            index0 = index.start or 0
+            index1 = index.stop or length(self.data)
+            dim = index1-index0 +1
+            [new_data = self.data[i] for i in range(index0,index1)]
+            return Vector(dim,new_data)
+        else:
+            raise IndexError("Indexes not allowed")
+    def transpose(self):
+        """Gives back the transpose of our vector"""
+        transposed = Vector(self.cols, self.rows)  # change rows with columns
+        transposed.data = self.data #here is enough to switch rows with cols since the data structure is 1D array
+        return transposed
+    def is_vector(self):
+        """ This method is needed because the dot product works for general type
+            that are scalar or vector
+        """
+        return True
+    def __mul__(other,self):
+        if isinstance(other,Matrix) and isinstance(self,Vector):
+            if self.cols != other.rows:
+                IndexError('Dimension not coincide')
+            else:
+                result = Vector(length(self.data))
+                for i in range(other.rows):
+                    [data1 = other.data[i,:]]
+                    v1 = Vector(self.cols,data1,True)
+                    result[i] = dot(v1,self)
+                return result
+        else: TypeError("Type not allowed")
+    def __mul__(self,other):
+        result = Vector(length(self),True)
+        result = __mul__(other,self.transpose())
+        return result
