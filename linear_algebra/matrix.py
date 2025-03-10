@@ -5,12 +5,11 @@ class Matrix:
     def __init__(self, rows, cols, fill=None):
         self.rows = rows
         self.cols = cols
-        
         # case fill == None there is no input list
         if fill is None:
-            self.data = [0] * (rows * cols)  # Initialization
+            self.data = array.array('d', [0] * (rows * cols))  # Initialization
         else:
-            self.data = fill 
+            self.data = array.array('d', fill) 
 
     def __setitem__(self, indices, value):
         """Overload of [] for save the data"""
@@ -134,6 +133,9 @@ class Matrix:
                 return result
         else: 
             raise TypeError("Type not allowed")
+    def eye(self):
+        #v = array.array
+        pass
 
 class Vector(Matrix):
     def __init__(self, dim, row_vector=False,fill=None):
