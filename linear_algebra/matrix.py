@@ -133,9 +133,20 @@ class Matrix:
                 return result
         else: 
             raise TypeError("Type not allowed")
-    def eye(self):
-        #v = array.array
-        pass
+    @classmethod
+    def eye(cls, size):
+        v = array.array('d', [0] * (size*size))
+        for i in range(size):
+            v[i * size + i] = 1
+        return cls(size,size,v)
+    def square(self):
+        if self.rows == self.cols:
+            return True
+        else: 
+            return False
+    def copy(self):
+        result = Matrix(self.rows,self.cols,self.data)
+        return result    
 
 class Vector(Matrix):
     def __init__(self, dim, row_vector=False,fill=None):

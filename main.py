@@ -1,4 +1,4 @@
-from linear_algebra import Matrix , Vector, dot
+from linear_algebra import *
 #Example1 Matrix
 
 A = Matrix(2, 3, [1.2345, 2.6789, 3.4567, 4.9999, 5.1234, 6.9876])
@@ -68,3 +68,15 @@ print()
 print("example8")
 v1 = Vector(2,True,[1,1])
 print(v1*A)
+print()
+print()
+print("example9")
+I = Matrix.eye(4)
+print(I)
+print("example10")
+A = Matrix(3,3,[4 ,-2,1,3,6,2,2,-1,5])
+L,U = LU(A)
+print()
+print(L)
+print()
+print(U)
