@@ -1,5 +1,6 @@
 # solvers.py
 from .matrix import Matrix,Vector 
+from math import sqrt
 
 def LU(A: Matrix,b:Vector):
     if A.square():    
@@ -30,6 +31,24 @@ def LU(A: Matrix,b:Vector):
             return x,L,U
     else:
         raise TypeError('A must be a square matrix')
+def Cholesky(A: Matrix, b: Vector):
+    if A.square():
+        H = Matrix(A.rows, A.cols, None)
+    
+        # 1st element of the diagonal
+        H[0, 0] = sqrt(A[0, 0])
+    
+        for i in range(A.rows):
+            # Diagonal element
+            H[i, i] = sqrt(A[i, i] - sum(H[i, k]**2 for k in range(0, i)))
+        
+            # element below the diagonal
+            for j in range(0, i):
+                H[i, j] = (A[i, j] - sum(H[i, k] * H[j, k] for k in range(0, j))) / H[j, j]
+
+        return H
+    else:
+        raise TypeError("A must be a square matrix")
 
 def solve(A: Matrix,b):
     return LU(A,b)
