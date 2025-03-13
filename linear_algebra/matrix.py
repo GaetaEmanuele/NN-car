@@ -14,7 +14,9 @@ class Matrix:
     def __setitem__(self, indices, value):
         """Overload of [] for save the data"""
         if isinstance(indices, tuple) and len(indices) == 2:
-            r, c = indices
+            r,c = indices 
+            r = self.rows - 1 if r == -1 else r 
+            c = self.cols - 1 if c == -1 else c
             if isinstance(r, int) and isinstance(c, int):
                 # simple case: A[i, j] = value
                 self.data[r * self.cols + c] = value
@@ -39,6 +41,8 @@ class Matrix:
         """Overload of [] for access the data"""
         if isinstance(indices, tuple) and len(indices) == 2:
             r, c = indices
+            r = self.rows - 1 if r == -1 else r
+            c = self.cols - 1 if c == -1 else c
             if isinstance(r, int) and isinstance(c, int):
                 # simple case: A[i, j]
                 return self.data[r * self.cols + c]
@@ -192,6 +196,9 @@ class Vector(Matrix):
     def __setitem__(self, index, value):
         """Overload of [] for save the data"""
         if isinstance(index, int) and index < max(self.rows,self.cols):
+            self.data[index] = value
+        elif isinstance(index, int) and index == -1
+            index = max(self.rows,self.cols)-1
             self.data[index] = value
         elif isinstance(index,slice):
             if length(value) != length(self.data):
