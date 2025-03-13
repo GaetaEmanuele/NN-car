@@ -197,7 +197,7 @@ class Vector(Matrix):
         """Overload of [] for save the data"""
         if isinstance(index, int) and index < max(self.rows,self.cols):
             self.data[index] = value
-        elif isinstance(index, int) and index == -1
+        elif isinstance(index, int) and index == -1:
             index = max(self.rows,self.cols)-1
             self.data[index] = value
         elif isinstance(index,slice):
