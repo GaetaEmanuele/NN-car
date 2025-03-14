@@ -1,3 +1,4 @@
+from math import sqrt
 
 def dot(a, b):
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):  
@@ -7,3 +8,9 @@ def dot(a, b):
         return sum(x * y for x, y in zip(a.data, b.data))  # scalar product between 2 number
 
     raise TypeError("Type of input data not valid")
+def norm(a,type):
+    if hasattr(a, "is_vector") and a.is_vector() and type == 'L2':
+        return sqrt(sum(x**2 for x in a.data))
+    if hasattr(a, "is_vector") and a.is_vector() and type == 'inf':
+        return max(a.data)
+    raise TypeError("datatype not allowed")

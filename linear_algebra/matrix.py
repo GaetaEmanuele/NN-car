@@ -253,3 +253,33 @@ class Vector(Matrix):
                 return result
         else: 
             raise TypeError("Type not allowed")
+    def copy(self):
+        if self.rows >1:
+            return Vector(self.rows,False,self.data)
+        else:
+            return Vector(self.cols,True,self.data)
+    def __add__(self, other):
+        if not isinstance(other, Vector):
+            raise TypeError("Type not allowed")
+
+        if self.rows != other.rows or self.cols != other.cols:
+            raise ValueError("Dimension must concide")
+
+        new_data = [self.data[i] + other.data[i] for i in range(len(self.data))]
+        if self.rows>1:
+            return Vector(self.rows, False, new_data)
+        else:
+            return Vector(self.cols, True, new_data)
+    
+    def __sub__(self, other):
+        if not isinstance(other, Vector):
+            raise TypeError("Type not allowed")
+
+        if self.rows != other.rows or self.cols != other.cols:
+            raise ValueError("Dimension must concide")
+
+        new_data = [self.data[i] - other.data[i] for i in range(len(self.data))]
+        if self.rows>1:
+            return Vector(self.rows, False, new_data)
+        else:
+            return Vector(self.cols, True, new_data)

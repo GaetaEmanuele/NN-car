@@ -1,5 +1,6 @@
 # solvers.py
 from .matrix import Matrix,Vector 
+from .utilities import norm
 from math import sqrt
 
 def LU(A: Matrix):
@@ -33,7 +34,7 @@ def direct_solver(L:Matrix,U:Matrix,b:Vector):
     x = Vector(b.length(),False,None)
     y = Vector(b.length(),False,None)
     # Forward substitution (Ly = b)
-    y[0] = b[0]
+    y[0] = b[0]/L[0,0]
     for i in range(1, L.rows):
         y[i] = (b[i] - sum(L[i, k] * y[k] for k in range(0, i)))/ L[i, i]
 
@@ -49,11 +50,30 @@ def solve(A: Matrix,b:Vector,Lower=None,Upper=None):
             raise IndexError("Dimension not compatible")
     else:
         if Lower is None and Upper is None :
-            H = Cholesky(A)
-            Ht = H.transpose()
-            return direct_solver(H,Ht,b)
+            L,U = LU(A)
+            return direct_solver(L,U,b)
         else:
             return direct_solver(Lower,Upper,b)
 
-
+def Jacobi(A:Matrix, b: Vector):
+    #Initialization of the method
+    max_it = 1000
+    eps = 1e-6
+    err = 1+eps
+    it = 0
+    x = Vector(A.rows,False,None)
+    x_old = x.copy()
+    while(err > eps and it < max_it):
+        for i in range(A.rows):
+            x[i] = (1.0/A[i,i])* (b[i] - sum(A[i,j]*x_old[j] for j in range(A.cols) if j != i))
+        # evaluation of the error
+        diff = x-x_old
+        x_old = x
+        err = norm(diff,'L2')
+        # update iteratio number
+        it += 1
+    if it< max_it:
+        return x
+    else:
+        raise IndexError('Jacobi is diverged') 
     
